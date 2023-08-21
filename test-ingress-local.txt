@@ -1,0 +1,8 @@
+# these both commands enable to test ingress on local machine. 
+
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/baremetal/deploy.yaml
+
+
+$ kubectl get svc ingress-nginx-controller -n ingress-nginx
+
+#  with provided port as a result of second command the app can be visited with paths determined in ingress.yaml 
