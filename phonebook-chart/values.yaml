@@ -1,0 +1,2 @@
+webserver_image: kapazan/webserver
+resultserver_image: kapazan/resultserver

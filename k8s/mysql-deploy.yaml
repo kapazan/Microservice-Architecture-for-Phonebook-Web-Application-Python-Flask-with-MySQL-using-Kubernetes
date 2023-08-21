@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: mysql
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: mysql
+        ports:
+        - containerPort: 3306
+        envFrom:
+          - secretRef:
+              name: mysql-secret
+          - configMapRef:
+              name: mysql-config
+              
+        # env:
+        # - name: MYSQL_ROOT_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: mysql-secret
+        #       key: mysql_root_password
+        #   # value: P123456p       --> 1. it is configured to get this value encoded from mysql-secret
+        # - name: MYSQL_PASSWORD    --> 2. it is then configured again to get values in POSIX format from mysql-secret 
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: mysql-secret
+        #       key: mysql_admin_password
+        #   # value: Clarusway_1  
+        # - name: MYSQL_DATABASE    --> it is configured to get values from mysql-configmap in POSIX format
+        #   value: phonebook
+        # - name: MYSQL_USER
+        #   value: clarus
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mysql-persistent-volume
+      
+      volumes:
+      - name: mysql-persistent-volume
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+
+
